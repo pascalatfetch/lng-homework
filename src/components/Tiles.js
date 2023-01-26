@@ -110,7 +110,6 @@ export class HomepageTile extends BaseTile {
 
         text: {
           color: 0xffffffff,
-          w: this.WIDTH,
           fontSize: 24,
           text: this.bindProp('title'),
           textOverflow: '...',
