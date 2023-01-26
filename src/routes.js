@@ -3,7 +3,6 @@ import { getConfiguration, getMovieDetails, getMovieSimilars, getUpcomingMovies 
 import { Details } from './pages/Details'
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
-// import { Loading } from './pages/Loading'
 
 export default {
   root: 'home',
@@ -43,9 +42,5 @@ export default {
       path: '*',
       component: NotFound,
     },
-    // {
-    //   path: '$',
-    //   component: Loading,
-    // },
   ],
 }
