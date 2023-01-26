@@ -24,4 +24,4 @@ npm install -g @lightningjs/cli
 The following key handlers are provided:
 
 Homepage: up, down, left, right, enter
-Details page: back
+Details page: up, down, left, right, enter, back

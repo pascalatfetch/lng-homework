@@ -1,5 +1,11 @@
 import { Lightning } from '@lightningjs/sdk'
-import { getTilePositions, HEIGHT, PADDING, ROW_ITEMS, Tile } from '../components/Tile'
+import {
+  getHomepageTilePositions,
+  HOMEPAGE_HEIGHT,
+  HOMEPAGE_PADDING,
+  HOMEPAGE_ROW_ITEMS,
+  HomepageTile,
+} from '../components/Tiles'
 import { getImagePath } from '../lib/image'
 
 export class Home extends Lightning.Component {
@@ -60,13 +66,13 @@ export class Home extends Lightning.Component {
 
     const children = this.upcoming.results.map((item, idx) => {
       return {
-        ...getTilePositions(idx),
+        ...getHomepageTilePositions(idx),
         imageSrc: getImagePath(item),
         itemId: item.id,
         title: item.title,
         item: item,
         idx,
-        type: Tile,
+        type: HomepageTile,
         signals: {
           focusTile: true,
         },
@@ -101,14 +107,14 @@ export class Home extends Lightning.Component {
   }
 
   _handleDown() {
-    if (this.index <= this.getTiles().length - ROW_ITEMS - 1) {
-      this.index = this.index + ROW_ITEMS
+    if (this.index <= this.getTiles().length - HOMEPAGE_ROW_ITEMS - 1) {
+      this.index = this.index + HOMEPAGE_ROW_ITEMS
     }
   }
 
   _handleUp() {
-    if (this.index >= ROW_ITEMS) {
-      this.index = this.index - ROW_ITEMS
+    if (this.index >= HOMEPAGE_ROW_ITEMS) {
+      this.index = this.index - HOMEPAGE_ROW_ITEMS
     }
   }
 
@@ -119,25 +125,23 @@ export class Home extends Lightning.Component {
   focusTile({ y }) {
     const currentOffset = this.tag('Tiles.Inner').y
     const relativeTop = y + currentOffset
-    const relativeBottom = relativeTop + HEIGHT
+    const relativeBottom = relativeTop + HOMEPAGE_HEIGHT
 
     const viewportTop = 0
     const viewportBottom = this.tag('Tiles').h
 
     if (relativeBottom > viewportBottom) {
-      console.log('scroll down')
       this.tag('Tiles.Inner').patch({
         smooth: {
-          y: currentOffset - (relativeBottom - viewportBottom + PADDING),
+          y: currentOffset - (relativeBottom - viewportBottom + HOMEPAGE_PADDING),
         },
       })
     }
 
     if (relativeTop < viewportTop) {
-      console.log('scroll up')
       this.tag('Tiles.Inner').patch({
         smooth: {
-          y: currentOffset + (relativeTop - PADDING) * -1,
+          y: currentOffset + (relativeTop - HOMEPAGE_PADDING) * -1,
         },
       })
     }

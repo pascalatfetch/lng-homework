@@ -1,5 +1,6 @@
 import { Lightning, Router } from '@lightningjs/sdk'
 import { DynamicImage } from '../components/DynamicImage'
+import { DetailsTile, DETAILS_ROW_ITEMS, getDetailsTilePositions } from '../components/Tiles'
 import { getImagePath } from '../lib/image'
 
 export class Details extends Lightning.Component {
@@ -66,26 +67,17 @@ export class Details extends Lightning.Component {
       },
 
       Similars: {
-        y: 600,
-        x: 700,
+        y: 700,
+        x: 690,
         w: 1000,
         h: 400,
-
-        flex: {
-          direction: 'row',
-          wrap: true,
-          justifyContent: 'space-between',
-          alignContent: 'flex-end',
-        },
       },
     }
   }
 
-  pageTransition() {
-    return 'crossFade'
-  }
+  _enable() {
+    this.index = null
 
-  _active() {
     this.tag('Title').patch({
       text: {
         text: this.details.title,
@@ -110,16 +102,16 @@ export class Details extends Lightning.Component {
 
     const children = this.similars.results
       .filter((i) => !!i.poster_path)
-      .map((i) => {
+      .map((item, idx) => {
         return {
-          w: 92,
-          h: 138,
-          imageSrc: getImagePath(i, 'w92'),
-          type: DynamicImage,
+          itemId: item.id,
+          title: item.title,
+          item: item,
 
-          flexItem: {
-            marginTop: 10,
-          },
+          ...getDetailsTilePositions(idx),
+
+          imageSrc: getImagePath(item, 'w92'),
+          type: DetailsTile,
         }
       })
 
@@ -128,9 +120,57 @@ export class Details extends Lightning.Component {
     })
   }
 
+  getSimilars() {
+    return this.tag('Similars').children
+  }
+
+  _getFocused() {
+    if (this.index === null) {
+      return this
+    }
+
+    return this.getSimilars()[this.index]
+  }
+
   _handleKey() {}
 
   _handleBack() {
-    Router.navigate('home')
+    Router.getHistory().length === 0 ? Router.navigate('home') : Router.back()
+  }
+
+  _handleRight() {
+    if (this.index >= this.getSimilars().length - 1) {
+      return
+    }
+
+    this.index++
+  }
+
+  _handleLeft() {
+    if (this.index <= 0) {
+      return
+    }
+
+    this.index--
+  }
+
+  _handleDown() {
+    if (this.index == null) {
+      this.index = 0
+    } else if (this.index <= this.getSimilars().length - DETAILS_ROW_ITEMS - 1) {
+      this.index = this.index + DETAILS_ROW_ITEMS
+    }
+  }
+
+  _handleUp() {
+    if (this.index >= DETAILS_ROW_ITEMS) {
+      this.index = this.index - DETAILS_ROW_ITEMS
+    } else {
+      this.index = null
+    }
+  }
+
+  set params({ prevPage }) {
+    this.prevPage = prevPage
   }
 }

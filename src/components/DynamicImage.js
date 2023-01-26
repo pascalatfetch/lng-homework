@@ -14,8 +14,6 @@ export class DynamicImage extends Lightning.Component {
   }
 
   _enable() {
-    console.log('_enable', this)
-
     this.tag('Background').patch({
       w: this.w,
       h: this.h,
@@ -31,8 +29,6 @@ export class DynamicImage extends Lightning.Component {
     })
 
     this.tag('Poster').on('txLoaded', () => {
-      console.log('texture loaded: ' + this.tag('Poster').src)
-
       this.tag('Poster').patch({
         smooth: {
           alpha: 1,

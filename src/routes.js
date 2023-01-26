@@ -17,7 +17,6 @@ export default {
       component: Home,
       on: async (page) => {
         const upcoming = await getUpcomingMovies()
-
         page.upcoming = upcoming
       },
 
@@ -28,12 +27,15 @@ export default {
       component: Details,
 
       on: async (page, { id }) => {
-        console.log(id)
         const similars = await getMovieSimilars(id)
         const details = await getMovieDetails(id)
 
         page.similars = similars
         page.details = details
+      },
+
+      options: {
+        reuseInstance: false,
       },
 
       cache: 60 * 10,
