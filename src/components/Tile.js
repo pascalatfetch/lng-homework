@@ -1,9 +1,10 @@
-import { Lightning } from '@lightningjs/sdk'
+import { Lightning, Router } from '@lightningjs/sdk'
+import { DynamicImage } from './DynamicImage'
 
-export const WIDTH = 440
-export const HEIGHT = 300
+export const WIDTH = 342
+export const HEIGHT = 557
 export const PADDING = 35
-export const ROW_ITEMS = 4
+export const ROW_ITEMS = 5
 
 export const getTilePositions = (idx) => {
   const row = Math.floor(idx / ROW_ITEMS)
@@ -21,41 +22,68 @@ export const getTilePositions = (idx) => {
 export class Tile extends Lightning.Component {
   _focus() {
     this.patch({
-      Tile: {
-        color: 0xff000000,
-      },
+      alpha: 1,
+    })
+
+    const { idx, y } = this
+
+    this.signal('focusTile', {
+      idx,
+      y,
     })
   }
 
   _unfocus() {
     this.patch({
-      Tile: {
-        color: 0xcc000000,
-      },
+      alpha: 0.5,
     })
+  }
+
+  _handleEnter() {
+    Router.navigate(`movie/${this.itemId}`)
   }
 
   static _template() {
     return {
-      Tile: {
-        w: WIDTH,
-        h: HEIGHT,
-        rect: true,
-        color: 0xcc000000,
+      alpha: 0.5,
+      color: 0x00000000,
 
-        Label: {
-          width: WIDTH,
-          x: WIDTH / 2,
-          y: HEIGHT,
-          mountY: 1,
-          mountX: 0.5,
-          text: {
-            fontSize: 24,
-            text: this.bindProp('title'),
-            clipping: true,
-          },
+      w: WIDTH,
+      h: HEIGHT,
+      rect: true,
+
+      Label: {
+        w: WIDTH,
+        x: WIDTH / 2,
+        y: HEIGHT,
+        mountY: 1,
+        mountX: 0.5,
+
+        text: {
+          color: 0xffffffff,
+          w: WIDTH,
+          fontSize: 24,
+          text: this.bindProp('title'),
+          textOverflow: '...',
+          wordWrap: false,
+          textAlign: 'center',
         },
       },
+
+      Poster: {
+        mount: 0,
+        w: WIDTH,
+        h: 513,
+        type: DynamicImage,
+      },
     }
+  }
+
+  _enable() {
+    console.log('_enable tile')
+
+    this.tag('Poster').patch({
+      imageSrc: this.imageSrc,
+    })
   }
 }

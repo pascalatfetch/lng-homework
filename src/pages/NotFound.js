@@ -1,6 +1,6 @@
 import { Lightning, Router } from '@lightningjs/sdk'
 
-export class Loading extends Lightning.Component {
+export class NotFound extends Lightning.Component {
   static _template() {
     return {
       Background: {
@@ -15,7 +15,7 @@ export class Loading extends Lightning.Component {
         mount: 0.5,
         text: {
           color: 0xffffffff,
-          text: 'Loading ...',
+          text: 'Not Found',
         },
       },
     }
