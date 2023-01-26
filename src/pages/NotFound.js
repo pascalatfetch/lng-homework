@@ -21,7 +21,7 @@ export class NotFound extends Lightning.Component {
     }
   }
 
-  _handleEnter() {
-    Router.resume()
+  _handleKey() {
+    Router.navigate('home')
   }
 }
