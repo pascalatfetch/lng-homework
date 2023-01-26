@@ -28,4 +28,30 @@ export default class App extends Router.App {
   _setup() {
     Router.startRouter(routes)
   }
+
+  _init() {
+    this.tag('Loading.Label').patch({
+      text: {
+        alpha: 0.5,
+        text: 'Loading Movie Data ...',
+      },
+    })
+
+    this.tag('Loading.Label')
+      .animation({
+        duration: 2,
+        repeat: -1,
+        actions: [
+          {
+            p: 'alpha',
+            v: {
+              0: 0.5,
+              0.5: 1,
+              1: 0.5,
+            },
+          },
+        ],
+      })
+      .start()
+  }
 }
